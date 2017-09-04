@@ -29,6 +29,12 @@ class LinearRegression:
         self._beta1 = np.sum(np.multiply(mean_deviation_x, mean_deviation_y)) / np.sum(mean_deviation_x ** 2)
         self._beta0 = mean_y - self._beta1 * mean_x
 
+        train_pred = self.predict(X)
+        return self._rmse_error(y, train_pred)
+
+    def _rmse_error(self, y, y_pred):
+        return np.sqrt(np.mean(np.subtract(y, y_pred) ** 2))
+
     def predict(self, input):
         return np.add(self._beta0, np.dot(self._beta1, input))
 
@@ -48,7 +54,7 @@ class LinearRegression:
         return round(self._correlation, decimal)
 
     def plot_regression(self, X, y):
-        plt.scatter(X, y, color="red", marker="o", s=30)
+        plt.scatter(X, y, color="red", marker="x", s=20)
 
         y_pred = self._beta0 + np.multiply(self._beta1, X)
 
@@ -63,14 +69,15 @@ class LinearRegression:
 def main():
     linear_reg = LinearRegression()
     X = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    y = [6, 8, 9, 11, 13, 16, 17, 19, 20, 23]
+    y = [6, 8, 9, 11, 13, 16, 17, 19, 20, 24]
 
-    linear_reg.fit(X, y)
+    rmse_error = linear_reg.fit(X, y)
     weights = linear_reg.weight_coefficients()
     print 'Weight coefficients for y = mx + c: m = {}, c = {}\n'.format(weights[1], weights[0])
     print 'Correlation between X and y: {}\n'.format(linear_reg.correlation())
+    print 'Root mean-squared error for training: {}\n'.format(rmse_error)
 
-    test_y = [3, 5]
+    test_y = [3, 5, 10]
     print 'Prediction of {}: {}'.format(test_y, (linear_reg.predict(test_y)))
     linear_reg.plot_regression(X, y)
 
