@@ -1,3 +1,8 @@
+# Least square method of univariate linear regression.
+# Solution/weight coeffecients: y = mx + c -> m = sum((Mean-deviation of Xi) * (Mean-deviation of Yi)) / sum((Mean-deviation of Xi) ** 2)
+#                                             c = Mean-Y - m * Mean-X
+# https://www.amherst.edu/system/files/media/1287/SLR_Leastsquares.pdf
+
 import numpy as np
 import matplotlib.pyplot as plt
 

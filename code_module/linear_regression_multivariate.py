@@ -1,5 +1,11 @@
+# Least square method of multivariate linear regression.
+# Solution/weight coeffecients = inv(X`X)X`y
+# X -> 1 x1 x2 x3 ...
+# https://web.stanford.edu/~mrosenfe/soc_meth_proj3/matrix_OLS_NYU_notes.pdf
+
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn import preprocessing
 
 
 class LinearRegression:
@@ -58,20 +64,24 @@ def main():
     # X = [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9]]
     # y = [6, 8, 9, 11, 13, 16, 17, 19, 20, 24]
 
+    scaler = preprocessing.MinMaxScaler(feature_range=(-1, 1)).fit(X_train)
+    X_train = scaler.transform(X_train)
+
     rmse_error = linear_reg.fit(X_train, y_train)
     weights = linear_reg.weight_coefficients()
     print 'Weight coefficients for y = b0 + b1x1 + b2x2 + ... {} \n'.format(weights)
     print 'Correlation between X and y: {}\n'.format(linear_reg.correlation())
     print 'Root mean-squared error for training: {}\n'.format(rmse_error)
 
-    # test_y = [[3], [5], [10]]
-    test_y = np.genfromtxt('../resources/boston_housing/test_wo_col_labels.csv', dtype=np.float32, delimiter=',')
-    test_y = test_y[:, 1:]
-    prediction = linear_reg.predict(test_y)
-    # print 'Prediction of {}: {}'.format(test_y, (linear_reg.predict(test_y)))
+    # X_test = [[3], [5], [10]]
+    X_test = np.genfromtxt('../resources/boston_housing/test_wo_col_labels.csv', dtype=np.float32, delimiter=',')
+    X_test = X_test[:, 1:]
+    X_test = scaler.transform(X_test)
+    prediction = linear_reg.predict(X_test)
+    # print 'Prediction of {}: {}'.format(X_test, (linear_reg.predict(X_test)))
     print 'Prediction on test instances: \n'
     for each_pred in prediction:
-        print each_pred
+        print round(each_pred, 1)
 
 
 if __name__ == '__main__':
