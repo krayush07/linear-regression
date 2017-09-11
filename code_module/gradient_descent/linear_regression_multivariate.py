@@ -28,7 +28,7 @@ class LinearRegression:
             theta[0] -= (lr/n) * np.sum(error_diff)
 
             for j in range(1, len(theta)-1, 1):
-                theta[j] -= (lr/n) * np.sum(np.dot(error_diff, X))
+                theta[j] -= (lr/n) * np.sum(np.dot(error_diff, X[:,j]))
 
             print('Loss at {} epoch: {}'.format((i + 1), round(curr_error, 5)))
         return curr_error
@@ -37,7 +37,7 @@ class LinearRegression:
         self._X = np.insert(X, 0, [1], axis=1)
         self._y = y
         self._compute_correlation()
-        self._coeffecients = np.random.uniform(low=-0.1, high=0.1, size=len(self._X[0]))
+        self._coeffecients = np.random.uniform(low=-0.001, high=0.001, size=len(self._X[0]))
         np.random.seed(seed)
         rmse_error = self._run_epoch(self._X, self._y, self._coeffecients, num_epochs, lr)
         # self._coeffecients = theta
@@ -84,7 +84,7 @@ def main():
     scaler = preprocessing.MinMaxScaler(feature_range=(-1, 1)).fit(X_train)
     X_train = scaler.transform(X_train)
 
-    rmse_error = linear_reg.fit(X_train, y_train, 500, 0.1, seed=12345)
+    rmse_error = linear_reg.fit(X_train, y_train, 5000, 0.01, seed=12345)
     weights = linear_reg.weight_coefficients()
     print 'Weight coefficients for y = b0 + b1x1 + b2x2 + ... {} \n'.format(weights)
     print 'Correlation between X and y: {}\n'.format(linear_reg.correlation())
