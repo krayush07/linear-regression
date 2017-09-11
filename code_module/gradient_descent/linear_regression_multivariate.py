@@ -1,4 +1,7 @@
 # Gradient Descent method of multivariate linear regression.
+# J(theta) = 1/2n * sum [(h(xi) - y(i)) ** 2]
+# http://www.holehouse.org/mlclass/04_Linear_Regression_with_multiple_variables.html
+
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -27,10 +30,10 @@ class LinearRegression:
             curr_error = self._rmse_error(y, curr_prediction)
             loss[i] = curr_error
             error_diff = np.subtract(curr_prediction, y)
-            theta[0] -= (lr/n) * np.sum(error_diff)
+            theta[0] -= (lr / n) * np.sum(error_diff)
 
-            for j in range(1, len(theta)-1, 1):
-                theta[j] -= (lr/n) * np.sum(np.dot(error_diff, X[:,j]))
+            for j in range(1, len(theta) - 1, 1):
+                theta[j] -= (lr / n) * np.sum(np.dot(error_diff, X[:, j]))
 
             print('Loss at {} epoch: {}'.format((i + 1), round(curr_error, 5)))
         self._plot_loss(loss)
