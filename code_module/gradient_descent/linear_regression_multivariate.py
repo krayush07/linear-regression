@@ -21,9 +21,11 @@ class LinearRegression:
     def _run_epoch(self, X, y, theta, num_epochs, lr):
         curr_error = 0.
         n = len(y)
+        loss = np.zeros(num_epochs)
         for i in range(num_epochs):
             curr_prediction = self.predict_train(X)
             curr_error = self._rmse_error(y, curr_prediction)
+            loss[i] = curr_error
             error_diff = np.subtract(curr_prediction, y)
             theta[0] -= (lr/n) * np.sum(error_diff)
 
@@ -31,7 +33,16 @@ class LinearRegression:
                 theta[j] -= (lr/n) * np.sum(np.dot(error_diff, X[:,j]))
 
             print('Loss at {} epoch: {}'.format((i + 1), round(curr_error, 5)))
+        self._plot_loss(loss)
         return curr_error
+
+    def _plot_loss(self, loss):
+        fig, ax = plt.subplots(figsize=(7, 5))
+        ax.plot(np.arange(len(loss)), loss, 'r')
+        ax.set_xlabel('Iterations')
+        ax.set_ylabel('Cost')
+        ax.set_title('Error vs. Training Epoch')
+        plt.show()
 
     def fit(self, X, y, num_epochs, lr, seed=np.random.randint(0, 1000000)):
         self._X = np.insert(X, 0, [1], axis=1)
